@@ -1,0 +1,21 @@
+{
+  "schema_version": "FIRST_LANGUAGE_PACK_V1",
+  "locale": "en-GB",
+  "version": "en-v1",
+  "templates": {
+    "explain": {
+      "kind": "QUESTION",
+      "locale": "en-GB",
+      "subject": "",
+      "body": "Synthetic approved example.",
+      "fact_ids": ["fact-test"]
+    },
+    "opening": {
+      "kind": "INITIAL",
+      "locale": "en-GB",
+      "subject": "Synthetic opener",
+      "body": "Synthetic initial message text.",
+      "fact_ids": []
+    }
+  }
+}

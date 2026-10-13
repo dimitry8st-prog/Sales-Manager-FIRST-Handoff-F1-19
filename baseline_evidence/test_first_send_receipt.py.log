@@ -1,0 +1,58 @@
+test_attempt_must_be_exact_builtin_dict (test_first_send_receipt.AttemptValidationTest.test_attempt_must_be_exact_builtin_dict) ... ok
+test_bad_attempt_no (test_first_send_receipt.AttemptValidationTest.test_bad_attempt_no) ... ok
+test_bad_hash (test_first_send_receipt.AttemptValidationTest.test_bad_hash) ... ok
+test_bad_ids (test_first_send_receipt.AttemptValidationTest.test_bad_ids) ... ok
+test_bad_phase (test_first_send_receipt.AttemptValidationTest.test_bad_phase) ... ok
+test_missing_fields (test_first_send_receipt.AttemptValidationTest.test_missing_fields) ... ok
+test_schema_version (test_first_send_receipt.AttemptValidationTest.test_schema_version) ... ok
+test_unknown_fields_rejected_even_with_all_required (test_first_send_receipt.AttemptValidationTest.test_unknown_fields_rejected_even_with_all_required) ... ok
+test_accepted_and_delivered_in_prepared (test_first_send_receipt.ConsistencyTest.test_accepted_and_delivered_in_prepared) ... ok
+test_accepted_and_delivered_nullable_violations (test_first_send_receipt.ConsistencyTest.test_accepted_and_delivered_nullable_violations) ... ok
+test_not_dispatched_requires_prepared (test_first_send_receipt.ConsistencyTest.test_not_dispatched_requires_prepared) ... ok
+test_not_sent_nullable_violations (test_first_send_receipt.ConsistencyTest.test_not_sent_nullable_violations) ... ok
+test_rejected_before_acceptance_requires_dispatch_started (test_first_send_receipt.ConsistencyTest.test_rejected_before_acceptance_requires_dispatch_started) ... ok
+test_timeout_and_unknown_must_carry_no_evidence (test_first_send_receipt.ConsistencyTest.test_timeout_and_unknown_must_carry_no_evidence) ... ok
+test_timeout_copy_of_accepted_receipt (test_first_send_receipt.ConsistencyTest.test_timeout_copy_of_accepted_receipt) ... ok
+test_invalid_attempt_beats_everything (test_first_send_receipt.ErrorPriorityTest.test_invalid_attempt_beats_everything) ... ok
+test_invalid_receipt_beats_scope_and_consistency (test_first_send_receipt.ErrorPriorityTest.test_invalid_receipt_beats_scope_and_consistency) ... ok
+test_scope_mismatch_beats_inconsistency (test_first_send_receipt.ErrorPriorityTest.test_scope_mismatch_beats_inconsistency) ... ok
+test_accepted (test_first_send_receipt.PositiveNormalizationTest.test_accepted) ... ok
+test_boundary_values_are_accepted_and_preserved (test_first_send_receipt.PositiveNormalizationTest.test_boundary_values_are_accepted_and_preserved) ... ok
+test_delivered (test_first_send_receipt.PositiveNormalizationTest.test_delivered) ... ok
+test_no_receipt_dispatch_started (test_first_send_receipt.PositiveNormalizationTest.test_no_receipt_dispatch_started) ... ok
+test_no_receipt_prepared (test_first_send_receipt.PositiveNormalizationTest.test_no_receipt_prepared) ... ok
+test_not_sent_not_dispatched_prepared (test_first_send_receipt.PositiveNormalizationTest.test_not_sent_not_dispatched_prepared) ... ok
+test_not_sent_rejected_before_acceptance_dispatch_started (test_first_send_receipt.PositiveNormalizationTest.test_not_sent_rejected_before_acceptance_dispatch_started) ... ok
+test_parsed_json_input_is_accepted (test_first_send_receipt.PositiveNormalizationTest.test_parsed_json_input_is_accepted) ... ok
+test_timeout_for_both_phases (test_first_send_receipt.PositiveNormalizationTest.test_timeout_for_both_phases) ... ok
+test_unknown_for_both_phases (test_first_send_receipt.PositiveNormalizationTest.test_unknown_for_both_phases) ... ok
+test_deterministic_for_equal_json (test_first_send_receipt.PurityAndContractTest.test_deterministic_for_equal_json) ... ok
+test_error_type_code_and_str (test_first_send_receipt.PurityAndContractTest.test_error_type_code_and_str) ... ok
+test_errors_do_not_leak_input_values (test_first_send_receipt.PurityAndContractTest.test_errors_do_not_leak_input_values) ... ok
+test_exact_keys_and_resend_never_authorized (test_first_send_receipt.PurityAndContractTest.test_exact_keys_and_resend_never_authorized) ... ok
+test_inputs_are_not_mutated_on_error (test_first_send_receipt.PurityAndContractTest.test_inputs_are_not_mutated_on_error) ... ok
+test_inputs_are_not_mutated_on_success (test_first_send_receipt.PurityAndContractTest.test_inputs_are_not_mutated_on_success) ... ok
+test_module_has_no_imports_io_or_global_state_mutation (test_first_send_receipt.PurityAndContractTest.test_module_has_no_imports_io_or_global_state_mutation) ... ok
+test_no_raw_key_or_type_errors_escape (test_first_send_receipt.PurityAndContractTest.test_no_raw_key_or_type_errors_escape) ... ok
+test_result_mutation_does_not_affect_inputs_or_later_calls (test_first_send_receipt.PurityAndContractTest.test_result_mutation_does_not_affect_inputs_or_later_calls) ... ok
+test_bad_attempt_no (test_first_send_receipt.ReceiptValidationTest.test_bad_attempt_no) ... ok
+test_bad_hash (test_first_send_receipt.ReceiptValidationTest.test_bad_hash) ... ok
+test_bad_ids (test_first_send_receipt.ReceiptValidationTest.test_bad_ids) ... ok
+test_bad_nullable_ids (test_first_send_receipt.ReceiptValidationTest.test_bad_nullable_ids) ... ok
+test_empty_literal_receipt (test_first_send_receipt.ReceiptValidationTest.test_empty_literal_receipt) ... ok
+test_missing_fields_including_nullable (test_first_send_receipt.ReceiptValidationTest.test_missing_fields_including_nullable) ... ok
+test_raw_http_like_payloads_are_not_receipts (test_first_send_receipt.ReceiptValidationTest.test_raw_http_like_payloads_are_not_receipts) ... ok
+test_receipt_must_be_exact_builtin_dict_or_none (test_first_send_receipt.ReceiptValidationTest.test_receipt_must_be_exact_builtin_dict_or_none) ... ok
+test_schema_version (test_first_send_receipt.ReceiptValidationTest.test_schema_version) ... ok
+test_unknown_fields_rejected_even_with_all_required (test_first_send_receipt.ReceiptValidationTest.test_unknown_fields_rejected_even_with_all_required) ... ok
+test_unknown_not_sent_reason (test_first_send_receipt.ReceiptValidationTest.test_unknown_not_sent_reason) ... ok
+test_unknown_outcome (test_first_send_receipt.ReceiptValidationTest.test_unknown_outcome) ... ok
+test_case_is_not_normalized (test_first_send_receipt.ScopeMismatchTest.test_case_is_not_normalized) ... ok
+test_each_scope_field_mismatch (test_first_send_receipt.ScopeMismatchTest.test_each_scope_field_mismatch) ... ok
+test_mismatch_for_every_outcome_and_phase (test_first_send_receipt.ScopeMismatchTest.test_mismatch_for_every_outcome_and_phase) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 0.011s
+
+OK
+CHECK_RESULT_JSON:{"tests": 52, "failures": 0, "errors": 0, "skips": 0, "ok": true}

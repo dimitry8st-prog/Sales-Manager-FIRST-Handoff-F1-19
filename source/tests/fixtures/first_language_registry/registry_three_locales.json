@@ -1,0 +1,7 @@
+{
+  "schema_version": "FIRST_LANGUAGE_REGISTRY_V1",
+  "registry_version": "registry-v1-extended",
+  "default_locale": "en-GB",
+  "active_locales": ["en-GB", "ru-RU", "de-DE"],
+  "language_pack_versions": {"en-GB": "en-v1", "ru-RU": "ru-v1", "de-DE": "de-v1"}
+}

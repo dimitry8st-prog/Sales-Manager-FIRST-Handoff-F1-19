@@ -1,0 +1,89 @@
+{
+  "task_id": "F1-19",
+  "revision": "R1",
+  "assignee_label": "Дмитрий стажер",
+  "title": "Handoff delivery intent",
+  "allowed_paths": [
+    "source/sales_handoff_intent.py",
+    "source/tests/wave3/test_f119.py",
+    "source/tests/fixtures/wave3/f119/*.json"
+  ],
+  "contract_version": "FIRST_WAVE3_19_V1",
+  "module_api": [
+    {
+      "signature": "build_handoff_intent(context: dict, recipient: dict, interest: dict) -> dict",
+      "input": "Exact F109 FIRST_HANDOFF_INPUT_V1; recipient FIRST_HANDOFF_RECIPIENT_V1 {schema_version,client_id,runtime_campaign_id,recipient_ref:str<=128,approval_ref:str<=128}; trusted interest FIRST_INTEREST_EVIDENCE_V1 {schema_version,client_id,runtime_campaign_id,lead_id,decision:INTEREST|QUESTION|UNCERTAIN,evidence_ref:str<=128}.",
+      "output": "{schema_version:FIRST_HANDOFF_INTENT_V1,status:PREPARED|HOLD,handoff_id:str|null,content_sha256:str|null,recipient_ref:str|null,context:accepted F109 assembled context|null,code:OK|INTEREST_NOT_CONFIRMED}",
+      "errors": [
+        "INVALID_INPUT",
+        "SCOPE_MISMATCH",
+        "F109 HandoffContextError codes propagated"
+      ],
+      "statuses": [
+        "PREPARED",
+        "HOLD"
+      ],
+      "error_precedence": [
+        "INVALID_INPUT",
+        "SCOPE_MISMATCH",
+        "F109 HandoffContextError codes propagated"
+      ]
+    }
+  ],
+  "accepted_source_dependencies": [
+    "sales_first_handoff.py"
+  ],
+  "owning_FG": [
+    "FG10"
+  ],
+  "integration_seam": {
+    "callsites": [
+      "sales_manager.process_notify_reply",
+      "sales_store.record_reply",
+      "task_store.create_task"
+    ],
+    "integration_changes": "Integrator sources validated classifier evidence/full history; creates one journal action for handoff intent; human ownership after agreed durable transition; trusted notification adapter/outcome reconciliation still required. Literal F119->HANDOFF ActionV1 golden vector in EXAMPLES.json; template_id null by kind, fact_ids from complete context.facts; product_id maps explicit trusted binding.offer_id, no guessed F105 product_id field."
+  },
+  "acceptance_vectors": [
+    "INTEREST exact context positive",
+    "QUESTION/UNCERTAIN HOLD",
+    "wrong lead/recipient scope reject",
+    "same handoff_id modified hash conflict handled journal",
+    "history>100 refused by F109",
+    "missing history refused",
+    "no truncation IDs>128 refused",
+    "delivery_status stays NOT_DISPATCHED"
+  ],
+  "scope_exclusions": [
+    "No classifier implementation",
+    "No notification sends",
+    "No history truncation",
+    "No whole-campaign stop",
+    "New journal adapter16MiB canonicalpayload cap may reject oversized otherwise valid F109 context; preserve original full history/context, never trim it."
+  ],
+  "gate_closure": "component acceptance does not automatically close FG",
+  "new_paths_only": true,
+  "error_precedence": {
+    "build_handoff_intent(context: dict, recipient: dict, interest: dict) -> dict": [
+      "INVALID_INPUT",
+      "SCOPE_MISMATCH",
+      "F109 HandoffContextError codes propagated"
+    ]
+  },
+  "design_status": "FROZEN_BOUND_INTERFACE",
+  "fixtures_path": "EXAMPLES.json",
+  "accepted_dependency_rule": "Only accepted SOURCE dependencies are production imports. Pending normalizer/correlator/lease components are injected frozen protocols with self-contained fixtures. Real integration requires accepted code; no invented implementation in packet.",
+  "literal_positive_vector": "EXAMPLES.json",
+  "return_evidence_required": [
+    "changedfiles SHA256 + patch only allowed paths",
+    "manifest exact frozen source unchanged",
+    "all own tests run exitcodes skip0",
+    "positive golden vector actual output",
+    "negative acceptance vectors actual expected codes",
+    "inherited accepted contracts/source tests regression results separately, no claim fullPASS withknownfailures"
+  ],
+  "status": "READY_FOR_PACKAGE_REVIEW",
+  "error_class_contract": "Public module-specific ValueError subclass with stable .code:str; str(exception)==code; error message contains code only, never input/body/email/token/SQL/credentials. Injected sameTXguard errors explicitly mapped by F115 contract.",
+  "project_id": "sales-manager-first",
+  "shared_contract_file": "SHARED_CONTRACTS.json"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "FIRST_LANGUAGE_PACK_V1",
+  "locale": "de-DE",
+  "version": "de-v1",
+  "templates": {
+    "explain": {
+      "kind": "QUESTION",
+      "locale": "de-DE",
+      "subject": "",
+      "body": "Synthetisches Beispiel zur Erweiterung.",
+      "fact_ids": ["fact-test"]
+    }
+  }
+}

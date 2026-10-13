@@ -1,0 +1,38 @@
+{
+  "schema_version": "FIRST_BINDING_INPUT_V1",
+  "client_id": "client-test",
+  "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+  "make_campaign_id": "make-campaign-test",
+  "offer": {
+    "offer_id": "offer-test",
+    "name": "Synthetic offer",
+    "description": "Synthetic configuration example."
+  },
+  "mailbox": {
+    "mailbox_ref": "mb-test",
+    "sender_email": "   "
+  },
+  "owner_approval_ref": "fixture:synthetic-not-live-approval",
+  "binding_version": "binding-v1",
+  "valid_from": "2026-10-12T09:00:00+00:00",
+  "expires_at": "2026-10-13T09:00:00+00:00",
+  "release_mode": "NO_OUTBOUND",
+  "default_locale": "en-GB",
+  "allowed_locales": [
+    "en-GB",
+    "ru-RU"
+  ],
+  "language_pack_versions": {
+    "en-GB": "en-v1",
+    "ru-RU": "ru-v1"
+  },
+  "daily_send_limit": 2,
+  "max_followups": 1,
+  "approved_facts": [
+    {
+      "fact_id": "fact-test",
+      "text": "Synthetic example only.",
+      "source_ref": "fixture:fact-test"
+    }
+  ]
+}

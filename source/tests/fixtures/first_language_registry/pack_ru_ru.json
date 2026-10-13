@@ -1,0 +1,21 @@
+{
+  "schema_version": "FIRST_LANGUAGE_PACK_V1",
+  "locale": "ru-RU",
+  "version": "ru-v1",
+  "templates": {
+    "explain": {
+      "kind": "QUESTION",
+      "locale": "ru-RU",
+      "subject": "",
+      "body": "Синтетический пример для проверки.",
+      "fact_ids": ["fact-test"]
+    },
+    "clarify": {
+      "kind": "OBJECTION",
+      "locale": "ru-RU",
+      "subject": "  ",
+      "body": "Синтетический ответ на возражение.",
+      "fact_ids": []
+    }
+  }
+}

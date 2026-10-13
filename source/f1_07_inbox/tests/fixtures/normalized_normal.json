@@ -1,0 +1,16 @@
+{
+  "schema_version": "FIRST_INBOUND_V1",
+  "client_id": "client-test",
+  "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+  "mailbox_ref": "mb-test",
+  "provider": "fixture",
+  "message_id": "Msg-A",
+  "thread_id": "Thread-A",
+  "sender_email": "buyer@example.test",
+  "recipient_email": "seller@example.test",
+  "received_at": "2026-10-11T12:00:00+00:00",
+  "body_text": "Please explain",
+  "event_kind": "INBOUND_MESSAGE",
+  "in_reply_to": null,
+  "event_key": "2e1de507fccc18b6d56dcd95ebacd4a87888dd36319c479fc659cf4d1f707110"
+}

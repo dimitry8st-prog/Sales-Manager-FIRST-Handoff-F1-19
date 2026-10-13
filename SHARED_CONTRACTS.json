@@ -1,0 +1,1140 @@
+{
+  "status": "FROZEN_BOUND_INTERFACES_PENDING_PACKAGE_ACCEPTANCE",
+  "project_id": "sales-manager-first",
+  "existing_injected_protocols": {
+    "normalize": "normalize_inbound(envelope:dict, *, binding:dict, now:datetime)->dict",
+    "correlate": "correlate_inbound(event:dict, *, scope:dict, records:list[dict])->dict",
+    "append": "append(event:dict, *, binding:dict)->dict",
+    "get": "get(*,client_id:str,mailbox_ref:str,event_key:str)->dict|None"
+  },
+  "inbox_binding_fixture": {
+    "schema_version": "FIRST_INBOX_BINDING_V1",
+    "client_id": "client-test",
+    "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+    "mailbox_ref": "mb-test",
+    "sender_email": "seller@example.test"
+  },
+  "normalized_event_fixture": {
+    "schema_version": "FIRST_INBOUND_V1",
+    "client_id": "client-test",
+    "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+    "mailbox_ref": "mb-test",
+    "provider": "fixture",
+    "message_id": "Msg-A",
+    "thread_id": "Thread-A",
+    "sender_email": "buyer@example.test",
+    "recipient_email": "seller@example.test",
+    "received_at": "2026-10-11T12:00:00+00:00",
+    "body_text": "Please explain",
+    "event_kind": "INBOUND_MESSAGE",
+    "in_reply_to": null,
+    "event_key": "2e1de507fccc18b6d56dcd95ebacd4a87888dd36319c479fc659cf4d1f707110"
+  },
+  "correlation_scope_fixture": {
+    "schema_version": "FIRST_CORRELATION_SCOPE_V1",
+    "client_id": "client-test",
+    "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+    "mailbox_ref": "mb-test",
+    "provider": "fixture",
+    "recipient_email": "seller@example.test"
+  },
+  "correlation_records_fixture": [
+    {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "mailbox_ref": "mb-test",
+      "provider": "fixture",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "thread_id": "Thread-A",
+      "sender_email": "buyer@example.test",
+      "outbound_message_ids": [
+        "Sent-A"
+      ],
+      "ownership": "AUTOMATION"
+    }
+  ],
+  "correlation_expected_fields": {
+    "schema_version": "FIRST_THREAD_CORRELATION_V1",
+    "event_key": "2e1de507fccc18b6d56dcd95ebacd4a87888dd36319c479fc659cf4d1f707110",
+    "message_id": "Msg-A",
+    "client_id": "client-test",
+    "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+    "mailbox_ref": "mb-test",
+    "provider": "fixture",
+    "status": "MATCHED",
+    "reason": "EXACT_BINDING",
+    "lead_id": "22222222-2222-4222-8222-222222222222",
+    "ownership": "AUTOMATION",
+    "matched_by": "THREAD",
+    "automation_allowed": true
+  },
+  "proposed_action_fixture": {
+    "schema_version": "FIRST_ACTION_INTENT_V1",
+    "action_id": "action-test-1",
+    "scope": {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A"
+    },
+    "expected_state_revision": 0,
+    "event_id": "event-test-1",
+    "kind": "REPLY",
+    "policy_version": "fixture-v1",
+    "locale": "ru-RU",
+    "language_pack_version": "ru-v1",
+    "template_id": "explain",
+    "fact_ids": [
+      "fact-test"
+    ],
+    "payload": {
+      "recipient_ref": "22222222-2222-4222-8222-222222222222",
+      "subject": "",
+      "body": "Синтетический пример для проверки."
+    },
+    "payload_sha256": "f167a46e56efa1307afed898187b9deac6d016760fde9a2cd2ea95b08dc1b7c7",
+    "binding_version": "binding-v1"
+  },
+  "action_rules": [
+    "Exact keys; no extra grant/auth/sent fields.",
+    "Action identifier is server-owned and <=128 characters, never generated from an untrusted body.",
+    "Payload recipient_ref is a trusted server lookup reference; it is not a recipient address asserted by the model.",
+    "kind SEND|REPLY|FOLLOWUP|HANDOFF; SEND/REPLY/FOLLOWUP payload exact recipient_ref,subject,body; HANDOFF exact recipient_ref,handoff_id,content_sha256,context. All action/scope/template/fact/version IDs<=128chars; scope.thread_id nullable only SEND.",
+    "Expected revision is exact int >=0, bool forbidden.",
+    "Policy version/locale/packversion and payload hash are immutable after journal create.",
+    "Same scoped action_id plus identical full canonical intent -> idempotent; changed intent -> conflict.",
+    "Canonical payload bytes: JSON ensure_ascii=False,sort_keys=True,separators comma colon,allow_nan=False then UTF8.",
+    "All inputs independent deep copies. No clock/random/env/file/network side effects in pure components.",
+    "HANDOFF requires template_id=null; fact_ids are complete trusted context facts subset of approved campaign facts; handoff payload includes full accepted assembled context and recipient_ref, handoff_id,content_sha256. SEND/REPLY/FOLLOWUP require nonempty approved template_id; no fake handoff template is invented.",
+    "Initial SEND comes from trusted campaign/preparation adapter. Camel decision enum is NOOP|STOP|HANDOFF|PROPOSE_REPLY|PROPOSE_FOLLOWUP|QUARANTINE; integrator maps PROPOSE_REPLY to REPLY, PROPOSE_FOLLOWUP to FOLLOWUP, HANDOFF to HANDOFF. No fabricated INTRO enum."
+  ],
+  "proposed_policy_snapshot_fixture": {
+    "schema_version": "FIRST_EXECUTION_POLICY_SNAPSHOT_V1",
+    "scope": {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A"
+    },
+    "policy_revision": 1,
+    "policy_version": "fixture-v1",
+    "state_revision": 0,
+    "release_mode": "NO_OUTBOUND",
+    "campaign_status": "RUNNING",
+    "ownership": "AUTOMATION",
+    "opted_out": false,
+    "quota_remaining": 2,
+    "budget_remaining_units": 2,
+    "active_locale": "ru-RU",
+    "language_pack_version": "ru-v1",
+    "grant_ref": null,
+    "binding_version": "binding-v1",
+    "valid_until": "2026-10-12T13:00:00+00:00",
+    "allowed_kinds": [
+      "SEND",
+      "REPLY",
+      "FOLLOWUP",
+      "HANDOFF"
+    ],
+    "emergency_stop": false,
+    "current_grant_revision": null
+  },
+  "policy_rules": [
+    "Snapshot comes from server-owned authenticated repository/config, never inbound body or model JSON.",
+    "Reference strings and schema markers are not proof of authentication, owner approval or grant.",
+    "NO_OUTBOUND denies real external actions even when every other predicate succeeds.",
+    "Production future grant verification and revocation require a distinct trusted gateway and fresh transaction-side check.",
+    "Check expected revision, exact scope, status, ownership, opt-out, quota, budget and version before adapter call.",
+    "Avoid claiming atomic quotas/fencing from a pure decision; persistence transaction owns reservation/CAS.",
+    "campaign_status RUNNING|PAUSED|EXHAUSTED; dialogue ownership is separate AUTOMATION|HUMAN|STOPPED; stop control supplied separately as emergency_stop bool; no invented ACTIVE campaign status.",
+    "Pure decision ELIGIBLE|DENY; external_effect_authorized always false. Actual NO_OUTBOUND always denies even with otherwise valid grant. Synthetic CONTROLLED fixture plus typed trusted grant verifies future eligibility only, never creates permission."
+  ],
+  "limits": {
+    "F102": "body<=65536 UTF8 bytes; now/received_at aware; future<=300sec; opaque IDs have no frozen max",
+    "F107": "ID<=512 UTF8 bytes; email<=320 bytes; headers<=64 pairs and16384 cumulative bytes; rejects NUL/lone surrogate",
+    "F111": "new scope/recordID<=256chars; records<=1000; outbound_ids<=100; old eventIDs no new max",
+    "F108": "all scope/action/provider_message/evidence IDs<=128chars; attempt_no1..1000000",
+    "F109": "IDs<=128chars; history1..100; facts/materials0..50; preserve full history or reject"
+  },
+  "integration_boundary": [
+    "Append original event before correlation; do not inject lead_id into FIRST_INBOUND_V1.",
+    "Unknown/human/stopped preserve inbox evidence; no action dispatch.",
+    "Provider authenticates outside normalizer; trust cannot be established by auth=true.",
+    "Duplicate inbox record may still have unprocessed dialogue work.",
+    "Pending F102/F103/F111 outputs can be represented by frozen fixtures in candidate tests, but assembled acceptance remains BLOCKED until exact accepted code is available."
+  ],
+  "transaction_fencing_protocol": {
+    "signature": "assert_owned(conn, *, task_key:str, owner_token:str, generation:int)->None",
+    "rule": "Use caller-owned transaction, SELECT matching lease row FOR UPDATE. Validate unexpired exact ownership/generation; no commit/rollback/connection close. Row lock held until protected write transaction completes. Raise STALE_OWNER on failure. Journal injects this frozen protocol; candidate tests self-contained fake and integration batch actual F116 implementation. Expiry compares PostgreSQL clock_timestamp(); caller now is never production expiry authority."
+  },
+  "transaction_state_revision_protocol": "assert_state_revision(conn,*,scope:dict,expected_revision:int)->None; lock actual authoritative conversation state row then compare exact revision; no commit/rollback/close",
+  "trusted_grant_fixture": {
+    "schema_version": "FIRST_VERIFIED_GRANT_SNAPSHOT_V1",
+    "grant_ref": "grant-fixture-1",
+    "scope": {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A"
+    },
+    "binding_version": "binding-v1",
+    "policy_version": "fixture-v1",
+    "allowed_kinds": [
+      "SEND",
+      "REPLY",
+      "FOLLOWUP",
+      "HANDOFF"
+    ],
+    "language_pack_versions": {
+      "en-GB": "en-v1",
+      "ru-RU": "ru-v1"
+    },
+    "valid_from": "2026-10-12T11:00:00+00:00",
+    "expires_at": "2026-10-12T13:00:00+00:00",
+    "revoked": false,
+    "evidence_ref": "fixture-verified-grant-1",
+    "grant_revision": 1,
+    "allowed_recipient_refs": [
+      "22222222-2222-4222-8222-222222222222",
+      "owner-test"
+    ]
+  },
+  "controlled_policy_fixture": {
+    "schema_version": "FIRST_EXECUTION_POLICY_SNAPSHOT_V1",
+    "scope": {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A"
+    },
+    "policy_revision": 1,
+    "policy_version": "fixture-v1",
+    "state_revision": 0,
+    "release_mode": "CONTROLLED",
+    "campaign_status": "RUNNING",
+    "ownership": "AUTOMATION",
+    "opted_out": false,
+    "quota_remaining": 2,
+    "budget_remaining_units": 2,
+    "active_locale": "ru-RU",
+    "language_pack_version": "ru-v1",
+    "grant_ref": "grant-fixture-1",
+    "binding_version": "binding-v1",
+    "valid_until": "2026-10-12T13:00:00+00:00",
+    "allowed_kinds": [
+      "SEND",
+      "REPLY",
+      "FOLLOWUP",
+      "HANDOFF"
+    ],
+    "emergency_stop": false,
+    "current_grant_revision": 1
+  },
+  "grant_rules": [
+    "Exact keys matching literal fixture; scope exact shared scope; IDs<=128chars, canonical runtime UUID; versions nonempty IDs; grant_revision positive int bool forbidden.",
+    "valid_from/expires_at aware UTCISO; valid_from<=now<expires_at; revoked exact bool.",
+    "allowed_kinds unique list1..4 enumSEND|REPLY|FOLLOWUP|HANDOFF; allowed_recipient_refs unique list1..100 identifiers<=128chars.",
+    "Grant is an already authenticated/owner-approved repository projection injected by trusted server code. JSON shape/schema/approvalref alone cannot establish authority; never forward provider/model grant fields.",
+    "CONTROLLED is a separate future policy snapshot enum, never an F105 release_mode nor output of campaign projection. Current integration retains NO_OUTBOUND; synthetic CONTROLLED fixtures exercise pure predicate without any send or permission mutation.",
+    "Snapshot grant_ref/current_grant_revision must equal grant; scope and binding/policy versions exact; fresh revocation/revision checked again in atomic dispatch transaction by integration owner."
+  ],
+  "new_schema_definitions": {
+    "ScopeV1": {
+      "exact_keys": [
+        "client_id",
+        "runtime_campaign_id",
+        "lead_id",
+        "mailbox_ref",
+        "thread_id"
+      ],
+      "types": {
+        "client_id": "nonempty identifier str<=128chars",
+        "runtime_campaign_id": "canonical UUID str",
+        "lead_id": "nonempty identifier str<=128chars",
+        "mailbox_ref": "nonempty identifier str<=128chars",
+        "thread_id": "nonempty identifier str<=128chars"
+      },
+      "thread_id_rule": "null only SEND; nonnull for REPLY/FOLLOWUP/HANDOFF"
+    },
+    "FIRST_ACTION_INTENT_V1": {
+      "exact_keys": [
+        "schema_version",
+        "action_id",
+        "scope",
+        "expected_state_revision",
+        "event_id",
+        "kind",
+        "policy_version",
+        "locale",
+        "language_pack_version",
+        "template_id",
+        "fact_ids",
+        "payload",
+        "payload_sha256",
+        "binding_version"
+      ],
+      "types": {
+        "schema_version": "literal",
+        "action_id": "identifier<=128",
+        "scope": "ScopeV1",
+        "expected_state_revision": "int>=0 notbool",
+        "event_id": "identifier<=128",
+        "kind": "SEND|REPLY|FOLLOWUP|HANDOFF",
+        "policy_version": "identifier<=128",
+        "binding_version": "identifier<=128",
+        "locale": "validated locale str",
+        "language_pack_version": "identifier<=128",
+        "template_id": "identifier<=128 forSEND/REPLY/FOLLOWUP; nullHANDOFF",
+        "fact_ids": "unique list0..50 identifier<=128",
+        "payload": "exact kind-specific JSON object; <=16MiB canonicalUTF8",
+        "payload_sha256": "64lowercasehex"
+      }
+    },
+    "FIRST_EXECUTION_POLICY_SNAPSHOT_V1": {
+      "exact_keys": [
+        "schema_version",
+        "scope",
+        "policy_revision",
+        "policy_version",
+        "state_revision",
+        "release_mode",
+        "campaign_status",
+        "ownership",
+        "opted_out",
+        "quota_remaining",
+        "budget_remaining_units",
+        "active_locale",
+        "language_pack_version",
+        "grant_ref",
+        "binding_version",
+        "valid_until",
+        "allowed_kinds",
+        "emergency_stop",
+        "current_grant_revision"
+      ],
+      "types": {
+        "schema_version": "literal",
+        "scope": "ScopeV1",
+        "policy_revision": "int>=0 notbool",
+        "state_revision": "int>=0 notbool",
+        "policy_version": "identifier<=128",
+        "binding_version": "identifier<=128",
+        "release_mode": "NO_OUTBOUND|CONTROLLED",
+        "campaign_status": "RUNNING|PAUSED|EXHAUSTED",
+        "ownership": "AUTOMATION|HUMAN|STOPPED",
+        "opted_out": "bool",
+        "emergency_stop": "bool",
+        "quota_remaining": "int>=0 notbool",
+        "budget_remaining_units": "int>=0 notbool",
+        "active_locale": "locale str",
+        "language_pack_version": "identifier<=128",
+        "grant_ref": "identifier<=128|null",
+        "current_grant_revision": "int>=1|null notbool",
+        "valid_until": "awareUTCISO",
+        "allowed_kinds": "unique enum list1..4"
+      }
+    }
+  },
+  "schemas": {
+    "ScopeV1": {
+      "type": "object",
+      "required": [
+        "client_id",
+        "runtime_campaign_id",
+        "lead_id",
+        "mailbox_ref",
+        "thread_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "runtime_campaign_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "semantic": "str(uuid.UUID(value)) == value"
+        },
+        "lead_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "mailbox_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "thread_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "ActionV1": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "action_id",
+        "scope",
+        "expected_state_revision",
+        "event_id",
+        "kind",
+        "policy_version",
+        "locale",
+        "language_pack_version",
+        "template_id",
+        "fact_ids",
+        "payload",
+        "payload_sha256",
+        "binding_version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "enum": [
+            "FIRST_ACTION_INTENT_V1"
+          ]
+        },
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "scope": {
+          "type": "object",
+          "required": [
+            "client_id",
+            "runtime_campaign_id",
+            "lead_id",
+            "mailbox_ref",
+            "thread_id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "client_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "runtime_campaign_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "semantic": "str(uuid.UUID(value)) == value"
+            },
+            "lead_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "mailbox_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "thread_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "expected_state_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "semantic": "type(value) is int; bool rejected"
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "kind": {
+          "enum": [
+            "SEND",
+            "REPLY",
+            "FOLLOWUP",
+            "HANDOFF"
+          ]
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "language_pack_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "template_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fact_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+            "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+          },
+          "uniqueItems": true,
+          "maxItems": 50
+        },
+        "payload": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "recipient_ref",
+                "subject",
+                "body"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "recipient_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                "subject": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "body": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000,
+                  "semantic": "not whitespace-only; UTF8 encodable; no ASCII control other than LF/TAB; full body preserved"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "recipient_ref",
+                "handoff_id",
+                "content_sha256",
+                "context"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "recipient_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                "handoff_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                "content_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "context": {
+                  "type": "object",
+                  "semantic": "exact accepted FIRST_HANDOFF_CONTEXT_V1 from F109, revalidate by injecting accepted assembler reconstructed FIRST_HANDOFF_INPUT_V1; equality includes ordered history/facts/materials, handoff_id/hash, NOT_DISPATCHED"
+                }
+              }
+            }
+          ]
+        },
+        "payload_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "binding_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        }
+      }
+    },
+    "ExecutionPolicyV1": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "scope",
+        "policy_revision",
+        "policy_version",
+        "state_revision",
+        "release_mode",
+        "campaign_status",
+        "ownership",
+        "opted_out",
+        "quota_remaining",
+        "budget_remaining_units",
+        "active_locale",
+        "language_pack_version",
+        "grant_ref",
+        "binding_version",
+        "valid_until",
+        "allowed_kinds",
+        "emergency_stop",
+        "current_grant_revision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "enum": [
+            "FIRST_EXECUTION_POLICY_SNAPSHOT_V1"
+          ]
+        },
+        "scope": {
+          "type": "object",
+          "required": [
+            "client_id",
+            "runtime_campaign_id",
+            "lead_id",
+            "mailbox_ref",
+            "thread_id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "client_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "runtime_campaign_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "semantic": "str(uuid.UUID(value)) == value"
+            },
+            "lead_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "mailbox_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "thread_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "policy_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "semantic": "type(value) is int; bool rejected"
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "state_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "semantic": "type(value) is int; bool rejected"
+        },
+        "release_mode": {
+          "enum": [
+            "NO_OUTBOUND",
+            "CONTROLLED"
+          ]
+        },
+        "campaign_status": {
+          "enum": [
+            "RUNNING",
+            "PAUSED",
+            "EXHAUSTED"
+          ]
+        },
+        "ownership": {
+          "enum": [
+            "AUTOMATION",
+            "HUMAN",
+            "STOPPED"
+          ]
+        },
+        "opted_out": {
+          "type": "boolean",
+          "semantic": "type(value) is bool"
+        },
+        "quota_remaining": {
+          "type": "integer",
+          "minimum": 0,
+          "semantic": "type(value) is int; bool rejected"
+        },
+        "budget_remaining_units": {
+          "type": "integer",
+          "minimum": 0,
+          "semantic": "type(value) is int; bool rejected"
+        },
+        "active_locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "language_pack_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "grant_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "binding_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time",
+          "semantic": "aware ISO datetime; offset exists; parse then compare in UTC; no local clock reads"
+        },
+        "allowed_kinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "SEND",
+              "REPLY",
+              "FOLLOWUP",
+              "HANDOFF"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "emergency_stop": {
+          "type": "boolean",
+          "semantic": "type(value) is bool"
+        },
+        "current_grant_revision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "semantic": "type(value) is int; bool forbidden"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "semantic": "CONTROLLED requires int>=1; NO_OUTBOUND permits null. Compare exact grant.grant_revision when CONTROLLED."
+        }
+      }
+    },
+    "VerifiedGrantV1": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "grant_ref",
+        "scope",
+        "binding_version",
+        "policy_version",
+        "allowed_kinds",
+        "language_pack_versions",
+        "valid_from",
+        "expires_at",
+        "revoked",
+        "evidence_ref",
+        "grant_revision",
+        "allowed_recipient_refs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "enum": [
+            "FIRST_VERIFIED_GRANT_SNAPSHOT_V1"
+          ]
+        },
+        "grant_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "scope": {
+          "type": "object",
+          "required": [
+            "client_id",
+            "runtime_campaign_id",
+            "lead_id",
+            "mailbox_ref",
+            "thread_id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "client_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "runtime_campaign_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "semantic": "str(uuid.UUID(value)) == value"
+            },
+            "lead_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "mailbox_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+              "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+            },
+            "thread_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+                  "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "binding_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "allowed_kinds": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "SEND",
+              "REPLY",
+              "FOLLOWUP",
+              "HANDOFF"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "language_pack_versions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+            "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+          },
+          "semantic": "each key satisfies ID; only server-approved locale/version references, no implicit wildcard"
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time",
+          "semantic": "aware ISO datetime; offset exists; parse then compare in UTC; no local clock reads"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "semantic": "aware ISO datetime; offset exists; parse then compare in UTC; no local clock reads"
+        },
+        "revoked": {
+          "type": "boolean",
+          "semantic": "type(value) is bool"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+          "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+        },
+        "grant_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "semantic": "type(value) is int; bool forbidden"
+        },
+        "allowed_recipient_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+            "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+          }
+        }
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "schema_version",
+      "action_id",
+      "decision",
+      "code",
+      "policy_revision",
+      "external_effect_authorized"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "enum": [
+          "FIRST_AUTHORIZATION_DECISION_V1"
+        ]
+      },
+      "action_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[^\\x00-\\x1f\\x7f]+$",
+        "semantic": "value == value.strip(); strict builtin str; UTF8 encodable"
+      },
+      "decision": {
+        "enum": [
+          "ELIGIBLE",
+          "DENY"
+        ]
+      },
+      "code": {
+        "enum": [
+          "OK",
+          "SCOPE_MISMATCH",
+          "VERSION_MISMATCH",
+          "STATE_REVISION_MISMATCH",
+          "EXPIRED",
+          "NO_OUTBOUND",
+          "EMERGENCY_STOP",
+          "PAUSED",
+          "EXHAUSTED",
+          "HUMAN_OWNED",
+          "SUPPRESSED",
+          "QUOTA_EXHAUSTED",
+          "BUDGET_EXHAUSTED",
+          "KIND_DENIED",
+          "GRANT_REQUIRED",
+          "GRANT_REFERENCE_MISMATCH",
+          "GRANT_SCOPE_MISMATCH",
+          "GRANT_VERSION_MISMATCH",
+          "GRANT_REVOKED",
+          "GRANT_NOT_YET_VALID",
+          "GRANT_EXPIRED",
+          "GRANT_KIND_DENIED",
+          "GRANT_LANGUAGE_MISMATCH",
+          "GRANT_REVISION_MISMATCH",
+          "RECIPIENT_DENIED"
+        ]
+      },
+      "policy_revision": {
+        "type": "integer",
+        "minimum": 0,
+        "semantic": "type(value) is int; bool rejected"
+      },
+      "external_effect_authorized": {
+        "enum": [
+          false
+        ]
+      }
+    }
+  },
+  "gate_validation_precedence": [
+    {
+      "code": "INVALID_INPUT",
+      "condition": "action/policy not exact dict; grant neither exact dict nor None; now not datetime; root args checked in action,policy,grant,now order"
+    },
+    {
+      "code": "INVALID_SCHEMA",
+      "condition": "wrong schema marker/missing/extra keys or wrong nested scalar/list/object types; inspect action,policy,grant in that order; strict builtin types; integer bool rejected"
+    },
+    {
+      "code": "INVALID_IDENTIFIER",
+      "condition": "invalid ID/UUID/hash/duplicate kind or fact IDs, in action then policy then grant order"
+    },
+    {
+      "code": "INVALID_TIME",
+      "condition": "now naive/no UTC offset; policy.valid_until or grant validity malformed/naive; grant valid_from >= expires_at"
+    },
+    {
+      "code": "INVALID_ACTION",
+      "condition": "kind payload mismatch; HANDOFF template not null; mail template null; nonSEND thread null; payload hash does not match canonical bytes; HANDOFF crossscope/hash/locale/context/facts mismatch"
+    }
+  ],
+  "gate_business_deny_precedence": [
+    "SCOPE_MISMATCH: exact action.scope != policy.scope including nullable thread",
+    "VERSION_MISMATCH: binding_version/policy_version/locale/packversion not exact policy matches",
+    "STATE_REVISION_MISMATCH: expected_state_revision != state_revision",
+    "EXPIRED: now >= policy.valid_until",
+    "NO_OUTBOUND: policy.release_mode == NO_OUTBOUND",
+    "EMERGENCY_STOP: emergency_stop true",
+    "PAUSED: campaign_status PAUSED",
+    "EXHAUSTED: campaign_status EXHAUSTED",
+    "HUMAN_OWNED: ownership HUMAN or STOPPED",
+    "SUPPRESSED: opted_out true",
+    "QUOTA_EXHAUSTED: quota_remaining ==0",
+    "BUDGET_EXHAUSTED: budget_remaining_units ==0",
+    "KIND_DENIED: action.kind not in policy.allowed_kinds",
+    "GRANT_REQUIRED: CONTROLLED policy and grant None",
+    "GRANT_REFERENCE_MISMATCH: grant_ref does not equal policy.grant_ref, including null",
+    "GRANT_SCOPE_MISMATCH: grant.scope != action.scope; no wildcards and no null equivalence",
+    "GRANT_VERSION_MISMATCH: grant binding_version or policy_version mismatch",
+    "GRANT_REVOKED: revoked true",
+    "GRANT_NOT_YET_VALID: now < valid_from",
+    "GRANT_REVISION_MISMATCH: exact trusted current_grant_revision != grant.grant_revision",
+    "GRANT_EXPIRED: now >= expires_at",
+    "GRANT_KIND_DENIED: action.kind not in grant.allowed_kinds",
+    "GRANT_LANGUAGE_MISMATCH: selectedlocale absent or pack version differs",
+    "RECIPIENT_DENIED: action.payload.recipient_ref absent from grant.allowed_recipient_refs"
+  ],
+  "gate_action_semantics": [
+    "SEND can have thread_id null or known ID. Other kinds require existing thread ID. Scope runtime_campaign_id is canonical UUID; lead_id is opaque ID, no invented UUID requirement.",
+    "SEND/REPLY/FOLLOWUP payload has exactly recipient_ref,subject,body; template_id nonnull. HANDOFF payload has exactly recipient_ref,handoff_id,content_sha256,context; template_id null.",
+    "Hash uses json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(comma,colon),allow_nan=False).encode UTF8; no mutation; reject unencodable strings.",
+    "Payload recipient_ref is a trusted recipient lookup ref; mail recipient_ref should equal scope.lead_id in these bounded mail tasks. Handoff recipient_ref is authorized human route reference and cannot be replaced by buyer body data.",
+    "HANDOFF context scope equals action scope; event_id equals handoff_id and context.handoff_id; content hash equals context.content_sha256; fact_ids equal unique context.facts fact_ids and all approved campaign facts checked by producer; policy/language versions equal context.",
+    "No caller-supplied dict or schema marker proves semantic source authenticity. Typed verified snapshot is a boundary contract issued by trusted repository adapter; the pure function cannot authenticate it."
+  ],
+  "source_trust_and_live_boundary": [
+    "F105 unchanged outputs NO_OUTBOUND. CONTROLLED is a NEW execution snapshot schema built only by the integrator from a separately verified server grant; never promote F105 output or use no_outbound=false.",
+    "Grant object comes from authenticated repository adapter that verifies owner authorization, exact scope, accepted binding/pack identities and revocation. Provider/model/body JSON is never accepted as a grant source.",
+    "ELIGIBLE means all supplied current predicates satisfied; external_effect_authorized is always false because actual dispatch still requires transaction-time fresh policy/grant/quota/state/fence checks and provider adapter integration.",
+    "Future real eligibility predicates are fully tested in this same component; no later large gate rewrite is required. Actual live permissions and side-effect executor are separate; this artifact grants none.",
+    "No execution_mode argument, ALLOW_SIMULATED or ALLOW_LIVE enum. Offline synthetic CONTROLLED positive vector checks eligibility without a network call."
+  ],
+  "adapter_payload_limit": {
+    "canonical_UTF8_bytes": 16777216,
+    "reason": "Explicit NEW adapter boundary, not inherited F109 limit. F109 language_packs cardinality is unbounded; cannot promise accepts every valid old context. Oversize rejects PAYLOAD_TOO_LARGE without truncation; original accepted context retained by caller.",
+    "positive_regression": "100messages*20000astralchars, canonicalpayload8031071bytes from integration engineer, fits16MiB; history unchanged."
+  },
+  "contract_version": "FIRST_WAVE3_BOUNDARY_V1"
+}

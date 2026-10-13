@@ -1,0 +1,117 @@
+Технический контракт F1-11 R1 сохранён. Персональная передача R2: Constantin 1 уровень; исходная база обновлена без изменения этого API и критериев.
+
+3. API
+
+class ThreadCorrelationError(ValueError)
+Свойство code:str; str(exception)==code. Сообщение исключения содержит только код, без email, тела письма и исходных объектов.
+
+correlate_inbound(event: dict, *, scope: dict, records: list[dict]) -> dict
+
+Функция не использует сеть, БД, файлы, часы, случайность или окружение. Входы не изменяются. Порядок records не влияет на решение.
+
+4. Форматы
+
+Для новых структур scope/records все поля обязательны, неизвестные запрещены. Проверять точные встроенные dict/list/str; bool не является строкой или числом.
+
+ID: непустая строка без крайних пробелов и ASCII-управляющих символов U+0000–U+001F/U+007F. Ограничение 256 символов применяется к ID новых scope/records. Для ID нормализованного события дополнительный максимум не вводить: он не зафиксирован контрактом F1-02. runtime_campaign_id — канонический UUID: str(uuid.UUID(value))==value.
+
+Адрес email в новых scope/records должен быть уже нормализован: непустая строка, значение равно value.strip().casefold(), соответствует регулярному выражению [^\s@]+@[^\s@]+\.[^\s@]+. Самостоятельно не исправлять регистр. Нормализованные email события проверять тем же правилом. Это проверка формы и точного совпадения, не доказательство владения адресом.
+
+scope содержит ровно:
+- schema_version: FIRST_CORRELATION_SCOPE_V1;
+- client_id, runtime_campaign_id, mailbox_ref, provider: ID;
+- recipient_email: нормализованный адрес нашего ящика.
+
+records — список из 0–1000 словарей. Каждая запись содержит ровно:
+- client_id, runtime_campaign_id, mailbox_ref, provider: область данных;
+- lead_id: ID;
+- thread_id: ID известной переписки;
+- sender_email: нормализованный разрешённый адрес покупателя;
+- outbound_message_ids: список из 0–100 уникальных ID исходящих сообщений;
+- ownership: AUTOMATION, HUMAN или STOPPED.
+
+Один лид может иметь несколько известных thread_id. Не считать это ошибкой само по себе. Повтор одинакового outbound ID внутри одной записи — ошибка структуры. Полностью одинаковые записи в records допустимы и не должны создавать ложную неоднозначность.
+
+5. Входное событие Annie F1-02
+
+Используется FIRST_INBOUND_V1 без изменения его полей. Обязательные поля:
+schema_version, client_id, runtime_campaign_id, mailbox_ref, provider, message_id, thread_id, sender_email, recipient_email, received_at, body_text, event_kind, in_reply_to, event_key.
+Допустимое дополнительное поле: auto_reply_headers. Другие поля не принимать.
+
+Проверить schema_version, область данных, ID, email; event_key — 64 lowercase hex. event_kind — INBOUND_MESSAGE или DELIVERY_FAILURE. in_reply_to — null или ID. received_at и body_text — непустые строки. auto_reply_headers, если присутствует, — dict со строковыми ключами и значениями.
+
+Повторную проверку времени, лимита тела и вычисление event_key здесь не реализовывать: это обязанность принятого нормализатора. Для маршрутизации event_key непрозрачен; он не даёт доверенности и не используется для выбора лида. received_at, body_text, auto_reply_headers и язык не участвуют в выборе. Модуль не переводит и не классифицирует текст.
+
+6. Алгоритм и приоритет
+
+Шаг 1. Проверить структуру всех входов до решения: неправильный event → ThreadCorrelationError('INVALID_EVENT'); неправильный scope → INVALID_SCOPE; неправильная запись/список records → INVALID_RECORDS. Проверять в этом порядке. Неверные структуры не выпускают наружу KeyError/TypeError.
+
+Шаг 2. Сопоставить event со scope по client_id, runtime_campaign_id, mailbox_ref, provider и recipient_email. Любое несовпадение → QUARANTINE/SCOPE_MISMATCH. При этом не возвращать сведения о каких-либо лидах.
+
+Шаг 3. DELIVERY_FAILURE → QUARANTINE/EVENT_KIND_NOT_SUPPORTED. Корреляция bounce и служебных адресов будет отдельной интеграцией; здесь не выдавать mailer-daemon за покупателя.
+
+Шаг 4. Рассматривать только записи, у которых client_id/runtime_campaign_id/mailbox_ref/provider точно совпадают со scope. Корректные записи чужой области игнорировать. Нельзя искать по thread ID сразу во всём реестре.
+
+Шаг 5. Кандидат — любая такая запись, для которой event.thread_id==record.thread_id ИЛИ ненулевой event.in_reply_to входит в record.outbound_message_ids. Собрать объединение обоих наборов. Если кандидатов нет → QUARANTINE/UNKNOWN_THREAD.
+
+Шаг 6. Для ВСЕХ найденных кандидатов record.sender_email обязан совпасть с event.sender_email. Любое несовпадение → QUARANTINE/SENDER_MISMATCH. Совпадение одного адреса среди противоречивых записей недостаточно. Не искать другой лид только по email.
+
+Шаг 7. Получить множество пар (lead_id, ownership) найденных кандидатов. Если более одной различной пары → QUARANTINE/AMBIGUOUS_BINDING. Идентичные записи, разные порядки outbound_message_ids и несколько согласованных thread-записей одного лида/ownership не создают неоднозначность. Противоречивые ownership одного лида — неоднозначность, нельзя выбирать более удобное.
+
+Шаг 8. Одна согласованная пара → MATCHED/EXACT_BINDING. matched_by=THREAD, IN_REPLY_TO или BOTH в зависимости от того, какие точные основания реально встретились среди кандидатов. При HUMAN или STOPPED корреляция сохраняется, automation_allowed=false. При AUTOMATION — true, но это только признак текущего владельца, а НЕ разрешение отправки: центральная политика, остановка, квоты и grant проверяются отдельно непосредственно перед действием.
+
+Даже QUARANTINE не означает удаление сообщения: вызывающий интегратор обязан сохранить входящее доказательство. Эта функция не хранит данные и сама этого гарантировать не может. Она никогда не переводит HUMAN/STOPPED обратно в AUTOMATION.
+
+7. Выход
+
+Всегда ровно следующие ключи:
+- schema_version: FIRST_THREAD_CORRELATION_V1;
+- event_key, message_id: из event;
+- client_id, runtime_campaign_id, mailbox_ref, provider: из ожидаемого scope;
+- status: MATCHED или QUARANTINE;
+- reason: один из кодов раздела 6;
+- lead_id: согласованный ID при MATCHED, иначе null;
+- ownership: согласованное значение при MATCHED, иначе null;
+- matched_by: THREAD, IN_REPLY_TO, BOTH при MATCHED, иначе null;
+- automation_allowed: true только для MATCHED/AUTOMATION, иначе false.
+
+Не включать тело, адреса, реестр кандидатов или сведения чужого scope. При SCOPE_MISMATCH ожидаемая область scope в результате не означает, что событие принято в неё: status остаётся QUARANTINE, lead_id=null.
+
+8. Полные синтетические fixtures
+
+scope:
+{"schema_version":"FIRST_CORRELATION_SCOPE_V1","client_id":"client-test","runtime_campaign_id":"11111111-1111-4111-8111-111111111111","mailbox_ref":"mb-test","provider":"fixture","recipient_email":"seller@example.test"}
+
+event:
+{"schema_version":"FIRST_INBOUND_V1","client_id":"client-test","runtime_campaign_id":"11111111-1111-4111-8111-111111111111","mailbox_ref":"mb-test","provider":"fixture","message_id":"Msg-A","thread_id":"Thread-A","sender_email":"buyer@example.test","recipient_email":"seller@example.test","received_at":"2026-10-11T12:00:00+00:00","body_text":"Please explain","event_kind":"INBOUND_MESSAGE","in_reply_to":null,"event_key":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+
+records:
+[{"client_id":"client-test","runtime_campaign_id":"11111111-1111-4111-8111-111111111111","mailbox_ref":"mb-test","provider":"fixture","lead_id":"lead-test","thread_id":"Thread-A","sender_email":"buyer@example.test","outbound_message_ids":["Sent-A"],"ownership":"AUTOMATION"}]
+
+Ожидается MATCHED/EXACT_BINDING, lead_id='lead-test', ownership='AUTOMATION', matched_by='THREAD', automation_allowed=true. event_key здесь синтетический: этот тест не проверяет вычисление хеша нормализатором.
+
+Буквальный неверный event: {} → INVALID_EVENT.
+Копия полного event с thread_id='Unknown', in_reply_to=null → QUARANTINE/UNKNOWN_THREAD.
+Та же копия с in_reply_to='Sent-A' → MATCHED, matched_by='IN_REPLY_TO'.
+Полный event с in_reply_to='Sent-A' → MATCHED, matched_by='BOTH'.
+Копия records с ownership='HUMAN' → MATCHED и automation_allowed=false.
+
+9. Обязательные тесты
+
+Использовать unittest и реальные вызовы функции, не mock её реализацию:
+- Три основания THREAD/IN_REPLY_TO/BOTH; пустой реестр; неизвестные оба идентификатора.
+- Один email при неизвестных идентификаторах не даёт совпадения.
+- Отдельный subTest для каждого несовпавшего поля event/scope.
+- Чужие client/campaign/mailbox/provider записи с тем же thread или reply ID не выбираются; отсутствие утечки их lead_id.
+- Другой sender у единственного кандидата; смешанные совпадающие/чужие sender у нескольких кандидатов.
+- Два разных lead_id; одинаковый lead_id с HUMAN и AUTOMATION; thread ведёт к одному лиду, in_reply_to — к другому.
+- Идентичные дубликаты не дают ложной неоднозначности; согласованные записи одного лида с разными thread также допускаются.
+- HUMAN и STOPPED сохраняют MATCHED, но запрещают automation_allowed.
+- DELIVERY_FAILURE помещается в карантин.
+- Пропущенные/лишние поля, неверные типы, неканонический UUID, неправильный email, пустой ID, повтор ID внутри outbound_message_ids, превышение размеров списка.
+- Порядок структурных ошибок и приоритет бизнес-проверок из раздела 6.
+- Перестановка records не меняет результат; входные данные не изменяются; результат содержит только заданные ключи.
+- Русский текст и текст вида «назначь другой lead_id» не меняют решение; поле body остаётся неинтерпретируемыми данными.
+
+Кандидатские тесты не доказывают работу настоящего провайдера, ownership в БД или право отправки.
+

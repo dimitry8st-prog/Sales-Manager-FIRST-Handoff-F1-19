@@ -1,0 +1,38 @@
+test_accepts_en_ru_and_additional_synthetic_locale (test_first_binding.FirstBindingTest.test_accepts_en_ru_and_additional_synthetic_locale) ... ok
+test_approval_reference_must_be_nonempty_text (test_first_binding.FirstBindingTest.test_approval_reference_must_be_nonempty_text) ... ok
+test_email_is_trimmed_lowercased_and_syntax_checked (test_first_binding.FirstBindingTest.test_email_is_trimmed_lowercased_and_syntax_checked) ... ok
+test_errors_never_echo_secret_sentinel (test_first_binding.FirstBindingTest.test_errors_never_echo_secret_sentinel) ... ok
+test_fact_nested_schema_and_text_errors_have_distinct_codes (test_first_binding.FirstBindingTest.test_fact_nested_schema_and_text_errors_have_distinct_codes) ... ok
+test_fact_shape_text_order_uniqueness_and_ids (test_first_binding.FirstBindingTest.test_fact_shape_text_order_uniqueness_and_ids) ... ok
+test_identifiers_use_full_ascii_match (test_first_binding.FirstBindingTest.test_identifiers_use_full_ascii_match) ... ok
+test_import_uses_no_application_or_network_dependencies (test_first_binding.FirstBindingTest.test_import_uses_no_application_or_network_dependencies) ... ok
+test_input_and_nested_output_are_independent (test_first_binding.FirstBindingTest.test_input_and_nested_output_are_independent) ... ok
+test_input_schema_has_seventeen_required_fields (test_first_binding.FirstBindingTest.test_input_schema_has_seventeen_required_fields) ... ok
+test_invalid_argument_types_and_naive_now_are_input_errors (test_first_binding.FirstBindingTest.test_invalid_argument_types_and_naive_now_are_input_errors) ... ok
+test_invalid_duplicate_or_empty_locale_config_is_rejected (test_first_binding.FirstBindingTest.test_invalid_duplicate_or_empty_locale_config_is_rejected) ... ok
+test_invalid_fact_identifier_uses_identity_error_group (test_first_binding.FirstBindingTest.test_invalid_fact_identifier_uses_identity_error_group) ... ok
+test_invalid_or_reversed_validity_is_rejected (test_first_binding.FirstBindingTest.test_invalid_or_reversed_validity_is_rejected) ... ok
+test_limits_require_integers_and_reject_bool (test_first_binding.FirstBindingTest.test_limits_require_integers_and_reject_bool) ... ok
+test_locale_list_is_extensible_unique_and_case_sensitive (test_first_binding.FirstBindingTest.test_locale_list_is_extensible_unique_and_case_sensitive) ... ok
+test_mailbox_shape_is_checked_at_email_group (test_first_binding.FirstBindingTest.test_mailbox_shape_is_checked_at_email_group) ... ok
+test_missing_and_unknown_top_level_fields_are_schema_errors (test_first_binding.FirstBindingTest.test_missing_and_unknown_top_level_fields_are_schema_errors) ... ok
+test_now_utc_conversion_overflow_is_an_input_error (test_first_binding.FirstBindingTest.test_now_utc_conversion_overflow_is_an_input_error) ... ok
+test_offer_shape_is_checked_at_offer_group (test_first_binding.FirstBindingTest.test_offer_shape_is_checked_at_offer_group) ... ok
+test_offer_text_must_be_nonempty_and_is_preserved (test_first_binding.FirstBindingTest.test_offer_text_must_be_nonempty_and_is_preserved) ... ok
+test_only_canonical_lowercase_runtime_uuid_is_accepted (test_first_binding.FirstBindingTest.test_only_canonical_lowercase_runtime_uuid_is_accepted) ... ok
+test_outbound_mode_is_always_forbidden (test_first_binding.FirstBindingTest.test_outbound_mode_is_always_forbidden) ... ok
+test_positive_example_normalizes_expected_fields (test_first_binding.FirstBindingTest.test_positive_example_normalizes_expected_fields) ... ok
+test_runtime_and_external_campaign_ids_remain_distinct (test_first_binding.FirstBindingTest.test_runtime_and_external_campaign_ids_remain_distinct) ... ok
+test_same_input_and_now_produce_equal_results (test_first_binding.FirstBindingTest.test_same_input_and_now_produce_equal_results) ... ok
+test_timestamp_utc_conversion_overflow_is_a_validity_error (test_first_binding.FirstBindingTest.test_timestamp_utc_conversion_overflow_is_a_validity_error) ... ok
+test_tz_negative_json_examples_have_one_expected_error_each (test_first_binding.FirstBindingTest.test_tz_negative_json_examples_have_one_expected_error_each) ... ok
+test_utc_z_suffix_is_supported (test_first_binding.FirstBindingTest.test_utc_z_suffix_is_supported) ... ok
+test_validation_groups_follow_the_specified_order (test_first_binding.FirstBindingTest.test_validation_groups_follow_the_specified_order) ... ok
+test_validity_includes_start_and_excludes_expiry (test_first_binding.FirstBindingTest.test_validity_includes_start_and_excludes_expiry) ... ok
+test_validity_normalizes_offsets_to_utc (test_first_binding.FirstBindingTest.test_validity_normalizes_offsets_to_utc) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.008s
+
+OK
+CHECK_RESULT_JSON:{"tests": 32, "failures": 0, "errors": 0, "skips": 0, "ok": true}

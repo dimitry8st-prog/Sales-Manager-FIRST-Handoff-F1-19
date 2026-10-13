@@ -1,43 +1,90 @@
-# Sales Manager FIRST — F1-19 R1
+# F1-19 — Подготовка передачи заинтересованного клиента
 
-Подготовка передачи заинтересованного клиента менеджеру.
+Учебное задание проекта **Autonomous Sales Manager FIRST**. Исполнитель: **Степанов Дмитрий Александрович**. Техническая ревизия и ревизия передачи: **R1**.
 
-## Статус
+## Результат
 
-Исходный пакет распакован без изменения файлов. CHECK_PACKAGE.py: PACKAGE_INPUTS_PASS. Реализация F1-19 ещё не начата; приёмка компонента не проводилась.
+Реализована чистая функция `build_handoff_intent(context, recipient, interest)` в [source/sales_handoff_intent.py](source/sales_handoff_intent.py). Она проверяет структуру входов и принадлежность клиента, кампании и лида, использует принятый компонент F1-09 для сборки полного контекста и возвращает решение:
 
-## Задача
+| Решение об интересе | Результат | Код |
+|---|---|---|
+| `INTEREST` | `PREPARED` | `OK` |
+| `QUESTION` или `UNCERTAIN` | `HOLD` | `INTEREST_NOT_CONFIRMED` |
 
-Добавить build_handoff_intent(context, recipient, interest). При подтверждённом INTEREST подготовить PREPARED с помощью принятого модуля F1-09. При QUESTION или UNCERTAIN вернуть HOLD. Проверять входы и область данных. Сохранять полную предоставленную историю. Отправка уведомлений и запись в журнал выполняются отдельными компонентами.
+Контекст подготовленной передачи сохраняет `delivery_status=NOT_DISPATCHED`. Функция не отправляет уведомления, не записывает данные в БД и не меняет входные объекты. Подтверждение полномочий получателя и подлинности свидетельства об интересе обеспечивается вызывающей системой.
 
-## С чего начать
+## Связь с F1-09
 
-1. Прочитать [ТЗ](00_READ_FIRST_TECHNICAL_TASK_RU.md).
-2. Изучить CONTRACT.json, SHARED_CONTRACTS.json и EXAMPLES.json.
-3. Подготовить отдельную venv с Python 3.12.x по ENVIRONMENT_AND_CHECKS_RU.md.
-4. Проверить пакет и сохранить исходные результаты.
-5. Добавить только разрешённые файлы, выполнить проверки и подготовить возврат по RETURN_RU.md.
+[F1-09](https://github.com/dimitry8st-prog/Sales-Manager-FIRST-Handoff-F1-09) формирует контекст передачи: историю, факты, материалы и следующий шаг. F1-19 развивает этот результат, добавляя проверки получателя и подтверждённого интереса. Репозитории разделены, потому что у заданий отдельные ТЗ, ревизии и комплекты сдачи. Принятый исходный компонент F1-09 в этом пакете сохранён без изменений.
 
-## Разрешённые новые файлы
+## Контракт и ошибки
 
-- source/sales_handoff_intent.py
-- source/tests/wave3/test_f119.py
-- source/tests/fixtures/wave3/f119/*.json
+Входы: `FIRST_HANDOFF_INPUT_V1`, `FIRST_HANDOFF_RECIPIENT_V1`, `FIRST_INTEREST_EVIDENCE_V1`. Выход: `FIRST_HANDOFF_INTENT_V1` с точным набором полей `schema_version`, `status`, `handoff_id`, `content_sha256`, `recipient_ref`, `context`, `code`.
 
-56 исходных файлов source защищены контрольными суммами. Существующие модули, manifests, runners, зависимости и SQL не изменять. Документы и логи создаются вне source/.
+Порядок отказов: `INVALID_INPUT` → `SCOPE_MISMATCH` → публичные ошибки `HandoffContextError` принятого F1-09. `HandoffIntentError` наследует `ValueError`, содержит `.code`, а текст исключения равен коду. Идентификаторы не обрезаются; история длиннее 100 сообщений отклоняется принятым компонентом.
 
-## Проверки из корня репозитория
+Точные требования: [ТЗ](00_READ_FIRST_TECHNICAL_TASK_RU.md), [CONTRACT.json](CONTRACT.json), [SHARED_CONTRACTS.json](SHARED_CONTRACTS.json), [EXAMPLES.json](EXAMPLES.json).
+
+## Что добавлено
+
+- [Реализация](source/sales_handoff_intent.py).
+- [15 собственных тестов](source/tests/wave3/test_f119.py).
+- [Синтетический пример внутри source](source/tests/fixtures/wave3/f119/examples.json), чтобы тесты работали при переносе source во временную папку.
+- [Отчёт](RETURN_REPORT.txt) и [инструкция подключения](INTEGRATION_NOTE.txt).
+- [Комплект возврата](F1-19_RETURN_R1/) с changes, доказательствами, патчем и контрольными суммами.
+- [Исходный проверенный ZIP сдачи](F1-19_RETURN_R1.zip).
+- [Повторная проверка в среде Codex](verification/codex/CHECKS_SUMMARY.json), отдельно от исторических пользовательских логов.
+
+## Проверки
+
+| Набор | Тестов | Результат |
+|---|---:|---|
+| Channel binding | 32 | PASS |
+| Language registry | 44 | PASS |
+| Send receipt | 52 | PASS |
+| Handoff context F1-09 | 27 | PASS |
+| Worker health | 49 | PASS |
+| Handoff intent F1-19 | 15 | PASS |
+| **Всего** | **219** | **PASS, без пропусков** |
+
+У пользователя проверки прошли на Windows / Python **3.12.8** / psycopg **3.2.9**. Повторный запуск присланного кода в среде Codex прошёл на Python **3.12.14** / psycopg **3.2.9**: все шесть наборов завершились с кодом 0. `CHECK_PACKAGE.py` подтвердил целостность исходного пакета. Все 19 SHA256 в возврате совпали; патч побайтно восстанавливает три новых файла.
+
+Собственные тесты проверяют буквальный пример, HOLD, область данных, поля и типы, границы длины, приоритет ошибок, неизменность входов, независимость вложенных объектов результата и изменение хеша при сохранении handoff_id.
+
+Проверка обработки конфликта настоящим журналом, создание ActionV1, конкуренция, восстановление и реальные отправки не выполнялись. Эти границы явно отмечены в отчёте и инструкции. Компонентный PASS не означает полной регрессии системы, официальной приёмки FG10 или внедрения.
+
+## Воспроизведение
+
+Требуется Python 3.12.x. Создайте виртуальную среду и установите зависимости:
+
+```bash
+python -m venv .venv
+python -m pip install -r source/requirements.txt
+```
+
+Команды выполняются интерпретатором виртуальной среды из корня репозитория:
 
 ```bash
 python -B CHECK_PACKAGE.py
-python -B run_checks.py --source source --output evidence/before
-python -B run_checks.py --source source --candidate f119 --output evidence/after
+python -B run_checks.py --source source --candidate f119 --output evidence/recheck
 ```
 
-Требуется настоящий psycopg[binary]==3.2.9. Исходные 204 успешных компонентных теста зафиксированы автором пакета в baseline_evidence/; они не означают успешную проверку будущего F1-19. До реализации candidate должен сообщать NOT_IMPLEMENTED.
+В Git Bash на Windows можно явно использовать `./.venv/Scripts/python.exe`. Отдельный запуск собственных тестов:
 
-## Сдача
+```bash
+PYTHONPATH=source ./.venv/Scripts/python.exe -B -m unittest discover -s source/tests/wave3 -p test_f119.py -v
+```
 
-ZIP с корнем F1-19_RETURN_R1: changes/, RETURN_REPORT.txt, evidence/, DIFF.patch, SHA256SUMS.txt и INTEGRATION_NOTE.txt. Подробности — [RETURN_RU.md](RETURN_RU.md).
+Исторические логи `F1-19_RETURN_R1/evidence/before` и `after` сохраняются. Для нового запуска используйте отдельную папку `evidence/recheck`.
 
-Не запускать приложение, worker, production DB, Make или реальные отправки. Интеграцию и независимую приёмку выполняют отдельно.
+## Исходная база
+
+SOURCE identity: `0176e66cfd4d95d5980188b0d9adb0d5cfb5cc9946c3400be66e06ce69f494c5`. 56 защищённых source-файлов и исходные документы пакета сохранены. Реализация добавляет только три разрешённых source-пути. Виртуальная среда, кэши и доступы в репозиторий не включены.
+
+## Передача и подключение
+
+Инженер внедрения соединяет `sales_manager.process_notify_reply`, сохранение ответа через `sales_store.record_reply`, новый callable, принятый журнал и `task_store.create_task` по их контрактам. Подключение, устойчивый переход владения и адаптер уведомлений проверяются отдельно. Порядок, mapping ActionV1 и незакрытые проверки описаны в [INTEGRATION_NOTE.txt](INTEGRATION_NOTE.txt).
+
+## Временной дневник
+
+13 октября 2026, МСК: 20:03–21:07 — реализация и проверки; 21:07–23:32 — перерыв **2 ч 25 мин**, исключённый из рабочего времени; с 23:32 — оформление и упаковка. До 14 октября 00:12 оценка по переписке составляет **1 ч 44 мин**, с подготовкой среды с 19:29 — **2 ч 18 мин**. Это оценка по сообщениям, не точный замер активности; последующее оформление GitHub в неё не включено.

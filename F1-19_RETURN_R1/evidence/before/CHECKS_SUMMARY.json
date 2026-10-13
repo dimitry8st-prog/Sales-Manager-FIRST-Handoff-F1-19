@@ -1,0 +1,52 @@
+{
+  "python": "3.12.8",
+  "psycopg": "3.2.9",
+  "baseline_files": 56,
+  "root_discovery": "NOT_RUN",
+  "live_send": "NOT_RUN",
+  "postgres_scope": "NOT_RUN",
+  "checks": [
+    {
+      "suite": "test_first_binding.py",
+      "kind": "baseline_component",
+      "expected_count": 32,
+      "raw_exit_code": 0,
+      "elapsed_seconds": 0.344,
+      "log": "test_first_binding.py.log"
+    },
+    {
+      "suite": "test_language_registry.py",
+      "kind": "baseline_component",
+      "expected_count": 44,
+      "raw_exit_code": 0,
+      "elapsed_seconds": 0.593,
+      "log": "test_language_registry.py.log"
+    },
+    {
+      "suite": "test_first_send_receipt.py",
+      "kind": "baseline_component",
+      "expected_count": 52,
+      "raw_exit_code": 0,
+      "elapsed_seconds": 0.797,
+      "log": "test_first_send_receipt.py.log"
+    },
+    {
+      "suite": "test_first_handoff.py",
+      "kind": "baseline_component",
+      "expected_count": 27,
+      "raw_exit_code": 0,
+      "elapsed_seconds": 0.843,
+      "log": "test_first_handoff.py.log"
+    },
+    {
+      "suite": "test_first_worker_health.py",
+      "kind": "baseline_component",
+      "expected_count": 49,
+      "raw_exit_code": 0,
+      "elapsed_seconds": 9.906,
+      "log": "test_first_worker_health.py.log"
+    }
+  ],
+  "pass": true,
+  "limitation": "Process guards support bounded reviewed suites, not a security sandbox for arbitrary hostile code. Component baseline is not full release acceptance."
+}

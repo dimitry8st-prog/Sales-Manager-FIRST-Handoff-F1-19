@@ -1,0 +1,50 @@
+test_body_whitespace_or_non_string_rejected (test_language_registry.LanguageRegistryTest.test_body_whitespace_or_non_string_rejected) ... ok
+test_command_like_template_text_stays_text (test_language_registry.LanguageRegistryTest.test_command_like_template_text_stays_text) ... ok
+test_damage_of_unrequested_locale_pack_detected (test_language_registry.LanguageRegistryTest.test_damage_of_unrequested_locale_pack_detected) ... ok
+test_damaged_loaded_rejected_on_revalidation (test_language_registry.LanguageRegistryTest.test_damaged_loaded_rejected_on_revalidation) ... ok
+test_default_locale_not_in_active_rejected (test_language_registry.LanguageRegistryTest.test_default_locale_not_in_active_rejected) ... ok
+test_duplicate_active_locale_rejected (test_language_registry.LanguageRegistryTest.test_duplicate_active_locale_rejected) ... ok
+test_duplicate_fact_id_in_template_rejected (test_language_registry.LanguageRegistryTest.test_duplicate_fact_id_in_template_rejected) ... ok
+test_duplicate_pack_locale_rejected (test_language_registry.LanguageRegistryTest.test_duplicate_pack_locale_rejected) ... ok
+test_empty_approved_fact_ids_with_empty_pack_fact_ids_allowed (test_language_registry.LanguageRegistryTest.test_empty_approved_fact_ids_with_empty_pack_fact_ids_allowed) ... ok
+test_empty_templates_rejected (test_language_registry.LanguageRegistryTest.test_empty_templates_rejected) ... ok
+test_error_str_returns_only_code_and_no_sentinel_leak (test_language_registry.LanguageRegistryTest.test_error_str_returns_only_code_and_no_sentinel_leak) ... ok
+test_extra_inactive_pack_rejected (test_language_registry.LanguageRegistryTest.test_extra_inactive_pack_rejected) ... ok
+test_fact_ids_invalid_types_via_public_functions (test_language_registry.LanguageRegistryTest.test_fact_ids_invalid_types_via_public_functions) ... ok
+test_full_en_ru_example_matches_expected_result (test_language_registry.LanguageRegistryTest.test_full_en_ru_example_matches_expected_result) ... ok
+test_initial_empty_subject_rejected (test_language_registry.LanguageRegistryTest.test_initial_empty_subject_rejected) ... ok
+test_inputs_not_mutated_and_no_shared_nested_objects (test_language_registry.LanguageRegistryTest.test_inputs_not_mutated_and_no_shared_nested_objects) ... ok
+test_invalid_base_types_rejected (test_language_registry.LanguageRegistryTest.test_invalid_base_types_rejected) ... ok
+test_invalid_fact_set_rejected (test_language_registry.LanguageRegistryTest.test_invalid_fact_set_rejected) ... ok
+test_invalid_identifiers_rejected (test_language_registry.LanguageRegistryTest.test_invalid_identifiers_rejected) ... ok
+test_invalid_loaded_schema_rejected_by_build (test_language_registry.LanguageRegistryTest.test_invalid_loaded_schema_rejected_by_build) ... ok
+test_invalid_locale_format_rejected (test_language_registry.LanguageRegistryTest.test_invalid_locale_format_rejected) ... ok
+test_invalid_pack_schema_rejected (test_language_registry.LanguageRegistryTest.test_invalid_pack_schema_rejected) ... ok
+test_invalid_registry_schema_rejected (test_language_registry.LanguageRegistryTest.test_invalid_registry_schema_rejected) ... ok
+test_kind_invalid_types_via_public_functions (test_language_registry.LanguageRegistryTest.test_kind_invalid_types_via_public_functions) ... ok
+test_loaded_result_has_exact_keys_and_no_status_fields (test_language_registry.LanguageRegistryTest.test_loaded_result_has_exact_keys_and_no_status_fields) ... ok
+test_missing_pack_rejected (test_language_registry.LanguageRegistryTest.test_missing_pack_rejected) ... ok
+test_module_is_stdlib_only_no_network_or_driver_imports (test_language_registry.LanguageRegistryTest.test_module_is_stdlib_only_no_network_or_driver_imports) ... ok
+test_non_identifier_fact_entry_rejected (test_language_registry.LanguageRegistryTest.test_non_identifier_fact_entry_rejected) ... ok
+test_non_initial_spaces_only_subject_stored_unchanged (test_language_registry.LanguageRegistryTest.test_non_initial_spaces_only_subject_stored_unchanged) ... ok
+test_pack_inner_locale_inactive_or_duplicate_rejected (test_language_registry.LanguageRegistryTest.test_pack_inner_locale_inactive_or_duplicate_rejected) ... ok
+test_pack_version_mismatch_rejected (test_language_registry.LanguageRegistryTest.test_pack_version_mismatch_rejected) ... ok
+test_query_locale_invalid_format_rejected (test_language_registry.LanguageRegistryTest.test_query_locale_invalid_format_rejected) ... ok
+test_query_locale_non_string_rejected (test_language_registry.LanguageRegistryTest.test_query_locale_non_string_rejected) ... ok
+test_query_locale_not_active_rejected (test_language_registry.LanguageRegistryTest.test_query_locale_not_active_rejected) ... ok
+test_repeated_calls_are_equal (test_language_registry.LanguageRegistryTest.test_repeated_calls_are_equal) ... ok
+test_same_template_id_across_locales_keeps_bodies_separate (test_language_registry.LanguageRegistryTest.test_same_template_id_across_locales_keeps_bodies_separate) ... ok
+test_swapped_packs_with_equal_versions_rejected (test_language_registry.LanguageRegistryTest.test_swapped_packs_with_equal_versions_rejected) ... ok
+test_synthetic_third_language_extends_without_code_changes (test_language_registry.LanguageRegistryTest.test_synthetic_third_language_extends_without_code_changes) ... ok
+test_template_locale_mismatch_rejected (test_language_registry.LanguageRegistryTest.test_template_locale_mismatch_rejected) ... ok
+test_template_locale_non_string_rejected (test_language_registry.LanguageRegistryTest.test_template_locale_non_string_rejected) ... ok
+test_unapproved_fact_rejected (test_language_registry.LanguageRegistryTest.test_unapproved_fact_rejected) ... ok
+test_unicode_preserved_unchanged (test_language_registry.LanguageRegistryTest.test_unicode_preserved_unchanged) ... ok
+test_unknown_kind_rejected (test_language_registry.LanguageRegistryTest.test_unknown_kind_rejected) ... ok
+test_version_mapping_keyset_mismatch_rejected (test_language_registry.LanguageRegistryTest.test_version_mapping_keyset_mismatch_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.090s
+
+OK
+CHECK_RESULT_JSON:{"tests": 44, "failures": 0, "errors": 0, "skips": 0, "ok": true}

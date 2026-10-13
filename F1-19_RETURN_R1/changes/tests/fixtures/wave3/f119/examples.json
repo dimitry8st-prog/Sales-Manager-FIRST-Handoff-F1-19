@@ -1,0 +1,187 @@
+{
+  "input": {
+    "context": {
+      "schema_version": "FIRST_HANDOFF_INPUT_V1",
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A",
+      "handoff_event_id": "handoff-test",
+      "product_id": "offer-test",
+      "policy_version": "fixture-v1",
+      "status": "HANDED_OFF",
+      "reason": "INTEREST",
+      "locale": "ru-RU",
+      "language_pack_version": "ru-v1",
+      "language_packs": {
+        "en-GB": "en-v1",
+        "ru-RU": "ru-v1"
+      },
+      "summary": "Синтетический клиент просит обсудить предложение.",
+      "next_step": "Проверить согласованный следующий шаг.",
+      "history": [
+        {
+          "message_id": "msg-test",
+          "client_id": "client-test",
+          "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+          "lead_id": "22222222-2222-4222-8222-222222222222",
+          "mailbox_ref": "mb-test",
+          "thread_id": "Thread-A",
+          "sequence": 0,
+          "direction": "INBOUND",
+          "actor": "BUYER",
+          "body": "Синтетический пример: обсудим предложение.",
+          "fact_ids": [],
+          "material_ids": []
+        }
+      ],
+      "facts": [],
+      "materials": []
+    },
+    "recipient": {
+      "schema_version": "FIRST_HANDOFF_RECIPIENT_V1",
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "recipient_ref": "owner-test",
+      "approval_ref": "fixture:synthetic-recipient"
+    },
+    "interest": {
+      "schema_version": "FIRST_INTEREST_EVIDENCE_V1",
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "decision": "INTEREST",
+      "evidence_ref": "fixture:synthetic-interest"
+    }
+  },
+  "expected": {
+    "schema_version": "FIRST_HANDOFF_INTENT_V1",
+    "status": "PREPARED",
+    "handoff_id": "handoff-test",
+    "content_sha256": "35167a24238d3a90b2252bb62b5d029e9cad42f4608704a7665dbdee61e8ec88",
+    "recipient_ref": "owner-test",
+    "context": {
+      "schema_version": "FIRST_HANDOFF_CONTEXT_V1",
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A",
+      "handoff_event_id": "handoff-test",
+      "product_id": "offer-test",
+      "policy_version": "fixture-v1",
+      "status": "HANDED_OFF",
+      "reason": "INTEREST",
+      "locale": "ru-RU",
+      "language_pack_version": "ru-v1",
+      "language_packs": {
+        "en-GB": "en-v1",
+        "ru-RU": "ru-v1"
+      },
+      "summary": "Синтетический клиент просит обсудить предложение.",
+      "next_step": "Проверить согласованный следующий шаг.",
+      "history": [
+        {
+          "message_id": "msg-test",
+          "client_id": "client-test",
+          "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+          "lead_id": "22222222-2222-4222-8222-222222222222",
+          "mailbox_ref": "mb-test",
+          "thread_id": "Thread-A",
+          "sequence": 0,
+          "direction": "INBOUND",
+          "actor": "BUYER",
+          "body": "Синтетический пример: обсудим предложение.",
+          "fact_ids": [],
+          "material_ids": []
+        }
+      ],
+      "facts": [],
+      "materials": [],
+      "handoff_id": "handoff-test",
+      "content_sha256": "35167a24238d3a90b2252bb62b5d029e9cad42f4608704a7665dbdee61e8ec88",
+      "delivery_status": "NOT_DISPATCHED"
+    },
+    "code": "OK"
+  },
+  "negative": [
+    {
+      "mutation": "interest.decision=QUESTION",
+      "expected_status": "HOLD",
+      "expected_code": "INTEREST_NOT_CONFIRMED"
+    },
+    {
+      "mutation": "history length101",
+      "expected_error": "INVALID_CONTEXT"
+    }
+  ],
+  "handoff_action_expected": {
+    "schema_version": "FIRST_ACTION_INTENT_V1",
+    "action_id": "handoff-test",
+    "scope": {
+      "client_id": "client-test",
+      "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+      "lead_id": "22222222-2222-4222-8222-222222222222",
+      "mailbox_ref": "mb-test",
+      "thread_id": "Thread-A"
+    },
+    "expected_state_revision": 0,
+    "event_id": "handoff-test",
+    "kind": "HANDOFF",
+    "policy_version": "fixture-v1",
+    "locale": "ru-RU",
+    "language_pack_version": "ru-v1",
+    "template_id": null,
+    "fact_ids": [],
+    "payload": {
+      "recipient_ref": "owner-test",
+      "handoff_id": "handoff-test",
+      "content_sha256": "35167a24238d3a90b2252bb62b5d029e9cad42f4608704a7665dbdee61e8ec88",
+      "context": {
+        "schema_version": "FIRST_HANDOFF_CONTEXT_V1",
+        "client_id": "client-test",
+        "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+        "lead_id": "22222222-2222-4222-8222-222222222222",
+        "mailbox_ref": "mb-test",
+        "thread_id": "Thread-A",
+        "handoff_event_id": "handoff-test",
+        "product_id": "offer-test",
+        "policy_version": "fixture-v1",
+        "status": "HANDED_OFF",
+        "reason": "INTEREST",
+        "locale": "ru-RU",
+        "language_pack_version": "ru-v1",
+        "language_packs": {
+          "en-GB": "en-v1",
+          "ru-RU": "ru-v1"
+        },
+        "summary": "Синтетический клиент просит обсудить предложение.",
+        "next_step": "Проверить согласованный следующий шаг.",
+        "history": [
+          {
+            "message_id": "msg-test",
+            "client_id": "client-test",
+            "runtime_campaign_id": "11111111-1111-4111-8111-111111111111",
+            "lead_id": "22222222-2222-4222-8222-222222222222",
+            "mailbox_ref": "mb-test",
+            "thread_id": "Thread-A",
+            "sequence": 0,
+            "direction": "INBOUND",
+            "actor": "BUYER",
+            "body": "Синтетический пример: обсудим предложение.",
+            "fact_ids": [],
+            "material_ids": []
+          }
+        ],
+        "facts": [],
+        "materials": [],
+        "handoff_id": "handoff-test",
+        "content_sha256": "35167a24238d3a90b2252bb62b5d029e9cad42f4608704a7665dbdee61e8ec88",
+        "delivery_status": "NOT_DISPATCHED"
+      }
+    },
+    "payload_sha256": "1f0fc9558c0eab0bb0c8627df906f3e32b607c69496c6c9d05bc0de0cd4b6cc4",
+    "binding_version": "binding-v1"
+  }
+}

@@ -1,0 +1,33 @@
+test_additional_language_and_large_registry (test_first_handoff.FirstHandoffTest.test_additional_language_and_large_registry) ... ok
+test_all_statuses_preserve_human_and_buyer_messages (test_first_handoff.FirstHandoffTest.test_all_statuses_preserve_human_and_buyer_messages) ... ok
+test_builtin_subclasses_rejected (test_first_handoff.FirstHandoffTest.test_builtin_subclasses_rejected) ... ok
+test_changed_body_changes_hash_but_preserves_handoff_id (test_first_handoff.FirstHandoffTest.test_changed_body_changes_hash_but_preserves_handoff_id) ... ok
+test_duplicate_fact_and_material_ids_rejected (test_first_handoff.FirstHandoffTest.test_duplicate_fact_and_material_ids_rejected) ... ok
+test_duplicate_message_id_and_sequence_rejected (test_first_handoff.FirstHandoffTest.test_duplicate_message_id_and_sequence_rejected) ... ok
+test_duplicate_references_rejected (test_first_handoff.FirstHandoffTest.test_duplicate_references_rejected) ... ok
+test_each_message_scope_field_rejected (test_first_handoff.FirstHandoffTest.test_each_message_scope_field_rejected) ... ok
+test_empty_context_rejected (test_first_handoff.FirstHandoffTest.test_empty_context_rejected) ... ok
+test_error_priority (test_first_handoff.FirstHandoffTest.test_error_priority) ... ok
+test_existing_references_preserved (test_first_handoff.FirstHandoffTest.test_existing_references_preserved) ... ok
+test_fact_material_and_reference_size_boundaries (test_first_handoff.FirstHandoffTest.test_fact_material_and_reference_size_boundaries) ... ok
+test_foreign_message_at_end_rejected (test_first_handoff.FirstHandoffTest.test_foreign_message_at_end_rejected) ... ok
+test_hash_matches_independent_calculation (test_first_handoff.FirstHandoffTest.test_hash_matches_independent_calculation) ... ok
+test_history_size_boundaries (test_first_handoff.FirstHandoffTest.test_history_size_boundaries) ... ok
+test_id_boundaries_and_control_characters (test_first_handoff.FirstHandoffTest.test_id_boundaries_and_control_characters) ... ok
+test_input_unchanged_and_result_detached (test_first_handoff.FirstHandoffTest.test_input_unchanged_and_result_detached) ... ok
+test_invalid_direction_actor_combinations_rejected (test_first_handoff.FirstHandoffTest.test_invalid_direction_actor_combinations_rejected) ... ok
+test_language_version_mismatch_rejected (test_first_handoff.FirstHandoffTest.test_language_version_mismatch_rejected) ... ok
+test_minimal_result (test_first_handoff.FirstHandoffTest.test_minimal_result) ... ok
+test_missing_and_extra_fields_rejected (test_first_handoff.FirstHandoffTest.test_missing_and_extra_fields_rejected) ... ok
+test_missing_references_rejected (test_first_handoff.FirstHandoffTest.test_missing_references_rejected) ... ok
+test_permutations_produce_same_sorted_result (test_first_handoff.FirstHandoffTest.test_permutations_produce_same_sorted_result) ... ok
+test_russian_and_english_text_preserved (test_first_handoff.FirstHandoffTest.test_russian_and_english_text_preserved) ... ok
+test_text_boundaries_and_control_characters (test_first_handoff.FirstHandoffTest.test_text_boundaries_and_control_characters) ... ok
+test_unknown_locale_rejected (test_first_handoff.FirstHandoffTest.test_unknown_locale_rejected) ... ok
+test_wrong_types_rejected (test_first_handoff.FirstHandoffTest.test_wrong_types_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.045s
+
+OK
+CHECK_RESULT_JSON:{"tests": 27, "failures": 0, "errors": 0, "skips": 0, "ok": true}
